@@ -10,17 +10,26 @@ int main()
     list.push(3);
     list.push(4);
     list.push(5);
-    // list.push(50);
-    // list.push(500);
+    list.push(6);
+    // list.push(7);
+    Node *node = list.find_node(3);
+    if (list.detect_cycle())
+        cout << "YES\n";
+    else
+        cout << "NO\n";
+        
+    list.makeCycle(3);
+    if (list.detect_cycle())
+        cout << "YES\n";
+    else
+        cout << "NO\n";
 
-    // list.print_list();
-    // list.reverse_list_with_recursive();
+    // delete_cycle
+    // list.delete_cycle();
+    list.remove_cycle();
+
     list.print_list();
-    // list.print_reverse();
-    // printf("newHead = %d\n", list.head->data);
-    // printf("newHead = %d\n", list.head->next->data);
     printf("length = %d\n", list.length);
-    Node *node = list.mid_pointer();
-    printf("data = %d\n", node->data);
+    // head->1->2->3->4->5->tail
     return 0;
 }

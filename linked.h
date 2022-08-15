@@ -4,11 +4,14 @@ class Node
 {
 public:
     int data;
+    int key;
     Node *prev;
     Node *next;
     Node(int data)
     {
         this->data = data;
+        srand(time(0));
+        this->key = rand() * rand();
         prev = NULL;
         next = NULL;
     }
@@ -146,6 +149,17 @@ public:
         // newNode->prev = node;
         // node->next = newNode;
     }
+    Node *find_node(int data)
+    {
+        Node *node = this->head;
+        while (node)
+        {
+            if (node->data == data)
+                return node;
+            node = node->next;
+        }
+        return NULL;
+    }
     int search(int data)
     {
         Node *node = this->head;
@@ -270,16 +284,75 @@ public:
     Node *mid_pointer()
     {
         Node *slow = this->head, *fast = this->head;
-        while (fast)
+        while (fast && fast->next)
         {
-            if (fast->next)
-            {
-                fast = fast->next->next;
-                slow = slow->next;
-            }
-            else
-                fast = fast->next;
+            fast = fast->next->next;
+            slow = slow->next;
         }
         return slow;
+    }
+    void makeCycle(int data)
+    {
+        Node *node = this->head;
+
+        while (node->data != data)
+        {
+            node = node->next;
+        }
+        this->tail->next = node;
+    };
+    void delete_cycle()
+    {
+        int pos = 1;
+        Node *node = this->head;
+        while (node)
+        {
+            if (pos == this->length)
+            {
+                node->next = NULL;
+                return;
+            }
+            pos++;
+            node = node->next;
+        }
+    }
+    bool detect_cycle()
+    {
+        if (this->length < 3)
+        {
+            return false;
+        }
+
+        Node *slow = this->head, *fast = this->head->next->next;
+        while (fast && fast->next)
+        {
+            if (fast == slow)
+            {
+                return true;
+            }
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        return false;
+    }
+    void remove_cycle()
+    {
+        if (this->length < 3)
+        {
+            return;
+        }
+        Node *slow = this->head, *fast = this->head;
+        do
+        {
+            fast = fast->next->next;
+            slow = slow->next;
+        } while (slow != fast);
+        fast = this->head;
+        while (fast->next != slow->next)
+        {
+            slow = slow->next;
+            fast = fast->next;
+        }
+        slow->next = NULL;
     }
 };
