@@ -267,4 +267,19 @@ public:
             carrent = head;
         }
     }
+    Node *mid_pointer()
+    {
+        Node *slow = this->head, *fast = this->head;
+        while (fast)
+        {
+            if (fast->next)
+            {
+                fast = fast->next->next;
+                slow = slow->next;
+            }
+            else
+                fast = fast->next;
+        }
+        return slow;
+    }
 };
