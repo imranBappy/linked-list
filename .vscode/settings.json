@@ -10,6 +10,12 @@
         "array": "cpp",
         "vector": "cpp",
         "forward_list": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "deque": "cpp",
+        "map": "cpp",
+        "unordered_map": "cpp",
+        "xhash": "cpp",
+        "xtree": "cpp",
+        "random": "cpp"
     }
 }

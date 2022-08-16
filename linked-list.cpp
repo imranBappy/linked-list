@@ -5,31 +5,22 @@ using namespace std;
 int main()
 {
     LinkedList list;
-    list.push(1);
+    LinkedList list2;
+
     list.push(2);
     list.push(3);
-    list.push(4);
-    list.push(5);
-    list.push(6);
-    // list.push(7);
-    Node *node = list.find_node(3);
-    if (list.detect_cycle())
-        cout << "YES\n";
-    else
-        cout << "NO\n";
-        
-    list.makeCycle(3);
-    if (list.detect_cycle())
-        cout << "YES\n";
-    else
-        cout << "NO\n";
+    list.push(1);
 
-    // delete_cycle
-    // list.delete_cycle();
-    list.remove_cycle();
+    list2.push(5);
+    list2.push(4);
+    list2.push(6);
 
     list.print_list();
+    list.marge_list(list2.head);
+    list.sort_list();
+    list.print_list();
+
     printf("length = %d\n", list.length);
-    // head->1->2->3->4->5->tail
+
     return 0;
 }

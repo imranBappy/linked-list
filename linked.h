@@ -1,3 +1,10 @@
+/*
+    linkedList.cpp
+    Purpose: Data structure way to linked list
+    @author Imran Hossen
+    @version 1.0.0 16/08/2022
+*/
+
 #include <bits/stdc++.h>
 using namespace std;
 class Node
@@ -9,23 +16,23 @@ public:
     Node *next;
     Node(int data)
     {
-        this->data = data;
         srand(time(0));
+        this->data = data;
         this->key = rand() * rand();
-        prev = NULL;
-        next = NULL;
+        this->prev = NULL;
+        this->next = NULL;
     }
 };
 class LinkedList
 {
 public:
     Node *head = NULL;
-    Node *tail = head;
+    Node *tail = NULL;
     int length = 0;
-    void push(int data)
+    void push(int data) // 0(1)
     {
         Node *newNode = new Node(data);
-        if (!head) // 0(1)
+        if (!head)
         {
             head = newNode;
             tail = newNode;
@@ -36,27 +43,28 @@ public:
             tail->next = newNode;
             tail = newNode;
         }
-        length++;
+        this->length++;
     }
-    void unshift(int data)
+    void unshift(int data) // 0(1)
     {
         Node *newNode = new Node(data);
         head->prev = newNode;
         newNode->next = head;
         head = newNode;
-        length++;
+        this->length++;
     }
-    void shift()
+    void shift() // 0(1)
     {
-        if (!this->head) // 0(1)
+        if (!this->head)
             return;
         Node *temp = head;
         head = head->next;
         delete temp;
+        this->length--;
     }
-    void pop()
+    void pop() // 0(1)
     {
-        if (!this->head) // 0(1)
+        if (!this->head)
             return;
         else if (this->head == this->tail)
         {
@@ -65,14 +73,14 @@ public:
         }
         else
         {
-            Node *newNode = this->tail;
-            newNode->prev->next = NULL;
-            tail = newNode->prev;
-            delete newNode;
+            Node *temp = this->tail;
+            temp->prev->next = NULL;
+            tail = temp->prev;
+            delete temp;
         }
-        length--;
+        this->length--;
     }
-    void print_list()
+    void print_list() // 0(n)
     {
         Node *node = this->head;
         printf("head -> ");
@@ -83,7 +91,7 @@ public:
         }
         printf(" tail\n");
     }
-    void print_reverse()
+    void print_reverse() // 0(n)
     {
         Node *node = this->tail;
         printf("tail -> ");
@@ -94,7 +102,11 @@ public:
         }
         printf(" head\n");
     }
-    void insert(int data, int position)
+    /*
+        worstCase : 0(1)
+        bestCase : 0(n-1)
+    */
+    void insert_by_postion(int data, int position)
     {
         if (position > this->length + 1 || position < 1)
             return;
@@ -120,34 +132,41 @@ public:
         newNode->next = node;
         node->prev->next = newNode;
         node->prev = newNode;
-        length++;
+        this->length++;
     }
-    void insertByValue(int value, int data)
+    /*
+    worstCase : 0(1)
+    bestCase : 0(n-1)
+*/
+    void insert_by_value(int value, int data)
     {
-        // 1,2,3,4,5
         Node *newNode = new Node(data);
         Node *node = this->head;
         if (!node)
             return;
-        // this is 1 way
-        int pos = 0;
-        pos = this->search(value);
-        this->insert(value, pos);
-        this->length++;
-        // this is 2nd way
+        // this is 1 way 0(n)
+        while (node->data != value)
+        {
+            node = node->next;
+        }
+        node->next->prev = newNode;
+        newNode->next = node->next;
+        newNode->prev = node;
+        node->next = newNode;
 
+        // this is 2nd way 0(n + n)
+        // pos = this->search(value);
+        // this->insert_by_postion(value, pos);
+        // this->length++;
+
+        // this is 3nd way  0(n + n)
+        // int pos = 0;
         // while (node->data != value)
         // {
         //     pos++;
         //     node = node->next;
         // }
-        // this->insert(value, pos + 1);
-
-        // this is 3nd way
-        // node->next->prev = newNode;
-        // newNode->next = node->next;
-        // newNode->prev = node;
-        // node->next = newNode;
+        // this->insert_by_postion(value, pos + 1);
     }
     Node *find_node(int data)
     {
@@ -185,8 +204,8 @@ public:
         {
             if (node->data == data)
             {
-                positions[len + 1] = pos;
                 len++;
+                positions[len] = pos;
             }
             node = node->next;
             pos++;
@@ -196,14 +215,13 @@ public:
         positions[0] = len;
         return positions;
     }
-    void remove(int pos)
+    void remove_by_position(int pos)
     {
         if (pos > this->length || this->length == 0)
             return;
         else if (pos == this->length || this->length == 1)
         {
             this->pop();
-            this->length--;
             return;
         }
 
@@ -220,12 +238,32 @@ public:
         this->length--;
         delete temp;
     }
-    void removeByValue(int data)
+    void remove_by_value(int data)
     {
-        int pos = this->search(data);
-        if (pos < 0)
+        // this is a 1 st way and it is best way
+        Node *node = this->head;
+        if (this->head->data == data)
+        {
+            this->shift();
             return;
-        this->remove(pos);
+        }
+        if (this->tail->data == data)
+        {
+            this->pop();
+            return;
+        }
+        while (node->data != data)
+        {
+            node = node->next;
+        }
+        node->prev->next = node->next;
+        node->next = node->prev;
+        delete node;
+        // this is 2nd way
+        // int pos = this->search(data);
+        // if (pos < 0)
+        //     return;
+        // this->remove_by_position(pos);
     }
     Node *reverse(Node *&head)
     {
@@ -242,7 +280,6 @@ public:
         head->next = NULL;
         return newHead;
     }
-
     void reverse_list_with_recursive()
     {
         this->head = this->reverse(this->head);
@@ -276,7 +313,7 @@ public:
             {
                 next = carrent->next;
                 swap(carrent->data, next->data);
-                carrent = carrent->next;
+                carrent = next;
             }
             carrent = head;
         }
@@ -335,7 +372,7 @@ public:
         }
         return false;
     }
-    void remove_cycle()
+    void remove_cycle() // 0(n+n)
     {
         if (this->length < 3)
         {
@@ -346,6 +383,7 @@ public:
         {
             fast = fast->next->next;
             slow = slow->next;
+
         } while (slow != fast);
         fast = this->head;
         while (fast->next != slow->next)
@@ -354,5 +392,37 @@ public:
             fast = fast->next;
         }
         slow->next = NULL;
+    }
+    void sort_list()
+    {
+        Node *node = this->head;
+        int flag = 1;
+        for (int i = 0; i < this->length; i++)
+        {
+            for (int j = 0; j < this->length - i - 1; j++)
+            {
+                if (node->data > node->next->data)
+                {
+                    swap(node->data, node->next->data);
+                }
+                node = node->next;
+                flag = 0;
+            }
+            node = this->head;
+            if (flag)
+                return;
+            flag = 1;
+        }
+    }
+    void marge_list(Node *&nodes)
+    {
+        this->tail->next = nodes;
+        while (nodes->next)
+        {
+            nodes = nodes->next;
+            this->length++;
+        }
+        this->tail = nodes;
+        this->length++;
     }
 };
