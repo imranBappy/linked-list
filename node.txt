@@ -1,7 +1,7 @@
 linked list problem:
 1, compare to list
 2, marge to list,
-3, sorting, other
+3, sorting, other,
 
 string:
     compare to string

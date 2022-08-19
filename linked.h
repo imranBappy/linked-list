@@ -4,16 +4,16 @@
     @author Imran Hossen
     @version 1.0.0 16/08/2022
 */
-
 #include <bits/stdc++.h>
 using namespace std;
+template <typename T>
 class Node
 {
 public:
-    int data;
+    T data;
     int key;
-    Node *prev;
-    Node *next;
+    Node<T> *prev;
+    Node<T> *next;
     Node(int data)
     {
         srand(time(0));
@@ -23,15 +23,16 @@ public:
         this->next = NULL;
     }
 };
+template <typename DT>
 class LinkedList
 {
 public:
-    Node *head = NULL;
-    Node *tail = NULL;
+    Node<DT> *head = NULL;
+    Node<DT> *tail = NULL;
     int length = 0;
-    void push(int data) // 0(1)
+    void push_back(int data) // 0(1)
     {
-        Node *newNode = new Node(data);
+        Node<DT> *newNode = new Node<DT>(data);
         if (!head)
         {
             head = newNode;
@@ -47,7 +48,7 @@ public:
     }
     void unshift(int data) // 0(1)
     {
-        Node *newNode = new Node(data);
+        Node<DT> *newNode = new Node<DT>(data);
         head->prev = newNode;
         newNode->next = head;
         head = newNode;
@@ -57,7 +58,7 @@ public:
     {
         if (!this->head)
             return;
-        Node *temp = head;
+        Node<DT> *temp = head;
         head = head->next;
         delete temp;
         this->length--;
@@ -73,16 +74,16 @@ public:
         }
         else
         {
-            Node *temp = this->tail;
+            Node<DT> *temp = this->tail;
             temp->prev->next = NULL;
             tail = temp->prev;
             delete temp;
         }
         this->length--;
     }
-    void print_list() // 0(n)
+    void print() // 0(n)
     {
-        Node *node = this->head;
+        Node<DT> *node = this->head;
         printf("head -> ");
         while (node)
         {
@@ -93,7 +94,7 @@ public:
     }
     void print_reverse() // 0(n)
     {
-        Node *node = this->tail;
+        Node<DT> *node = this->tail;
         printf("tail -> ");
         while (node)
         {
@@ -112,7 +113,7 @@ public:
             return;
         if (position == this->length + 1)
         {
-            this->push(data);
+            this->push_back(data);
             return;
         }
         if (position == 1)
@@ -120,8 +121,8 @@ public:
             this->unshift(data);
             return;
         }
-        Node *newNode = new Node(data);
-        Node *node = this->head;
+        Node<DT> *newNode = new Node<DT>(data);
+        Node<DT> *node = this->head;
         int pos = 1;
         while (pos != position)
         {
@@ -140,8 +141,8 @@ public:
 */
     void insert_by_value(int value, int data)
     {
-        Node *newNode = new Node(data);
-        Node *node = this->head;
+        Node<DT> *newNode = new Node<DT>(data);
+        Node<DT> *node = this->head;
         if (!node)
             return;
         // this is 1 way 0(n)
@@ -168,9 +169,9 @@ public:
         // }
         // this->insert_by_postion(value, pos + 1);
     }
-    Node *find_node(int data)
+    Node<DT> *find_node(int data)
     {
-        Node *node = this->head;
+        Node<DT> *node = this->head;
         while (node)
         {
             if (node->data == data)
@@ -181,7 +182,7 @@ public:
     }
     int search(int data)
     {
-        Node *node = this->head;
+        Node<DT> *node = this->head;
         int pos = 1;
         while (node)
         {
@@ -194,7 +195,7 @@ public:
     }
     int *search_for_duplicate(int data)
     {
-        Node *node = this->head;
+        Node<DT> *node = this->head;
         int *positions = new int[this->length + 1];
         for (int i = 0; i < this->length + 1; i++)
             positions[i] = 0;
@@ -225,14 +226,14 @@ public:
             return;
         }
 
-        Node *node = this->head;
+        Node<DT> *node = this->head;
         int count = 1;
         while (node->next && pos != count)
         {
             node = node->next;
             count++;
         }
-        Node *temp = node;
+        Node<DT> *temp = node;
         node->prev->next = node->next;
         node->next->prev = node->prev;
         this->length--;
@@ -241,7 +242,7 @@ public:
     void remove_by_value(int data)
     {
         // this is a 1 st way and it is best way
-        Node *node = this->head;
+        Node<DT> *node = this->head;
         if (this->head->data == data)
         {
             this->shift();
@@ -265,14 +266,14 @@ public:
         //     return;
         // this->remove_by_position(pos);
     }
-    Node *reverse(Node *&head)
+    Node<DT> *reverse(Node<DT> *&head)
     {
         if (!head->next || !head)
         {
             head->prev = NULL;
             return head;
         }
-        Node *newHead = reverse(head->next);
+        Node<DT> *newHead = reverse(head->next);
         if (!head->prev)
             this->tail = head;
         head->next->next = head;
@@ -286,8 +287,8 @@ public:
     }
     void reverse_list()
     {
-        Node *carrent = this->head;
-        Node *prev = NULL, *next = carrent->next;
+        Node<DT> *carrent = this->head;
+        Node<DT> *prev = NULL, *next = carrent->next;
         this->tail = this->head;
         while (1)
         {
@@ -303,9 +304,9 @@ public:
     }
     void reverse_list_by_nested()
     {
-        Node *carrent = this->head;
-        Node *prev = NULL, *next = carrent->next;
-        Node *node = this->head;
+        Node<DT> *carrent = this->head;
+        Node<DT> *prev = NULL, *next = carrent->next;
+        Node<DT> *node = this->head;
         int len = this->length;
         for (int j = 0; j < len; j++)
         {
@@ -318,9 +319,9 @@ public:
             carrent = head;
         }
     }
-    Node *mid_pointer()
+    Node<DT> *mid_pointer()
     {
-        Node *slow = this->head, *fast = this->head;
+        Node<DT> *slow = this->head, *fast = this->head;
         while (fast && fast->next)
         {
             fast = fast->next->next;
@@ -330,7 +331,7 @@ public:
     }
     void makeCycle(int data)
     {
-        Node *node = this->head;
+        Node<DT> *node = this->head;
 
         while (node->data != data)
         {
@@ -341,7 +342,7 @@ public:
     void delete_cycle()
     {
         int pos = 1;
-        Node *node = this->head;
+        Node<DT> *node = this->head;
         while (node)
         {
             if (pos == this->length)
@@ -360,7 +361,7 @@ public:
             return false;
         }
 
-        Node *slow = this->head, *fast = this->head->next->next;
+        Node<DT> *slow = this->head, *fast = this->head->next->next;
         while (fast && fast->next)
         {
             if (fast == slow)
@@ -378,7 +379,7 @@ public:
         {
             return;
         }
-        Node *slow = this->head, *fast = this->head;
+        Node<DT> *slow = this->head, *fast = this->head;
         do
         {
             fast = fast->next->next;
@@ -395,7 +396,7 @@ public:
     }
     void sort_list()
     {
-        Node *node = this->head;
+        Node<DT> *node = this->head;
         int flag = 1;
         for (int i = 0; i < this->length; i++)
         {
@@ -414,7 +415,7 @@ public:
             flag = 1;
         }
     }
-    void marge_list(Node *&nodes)
+    void marge_list(Node<DT> *&nodes)
     {
         this->tail->next = nodes;
         while (nodes->next)
